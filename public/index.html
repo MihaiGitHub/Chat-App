@@ -3,5 +3,11 @@
     <head></head>
     <body>
         Chat App
+
+        <!-- File served up by the server and accessed by the client at below URL -->
+        <script src="/socket.io/socket.io.js"></script>
+
+        <!-- Because above file is loaded in first, below file will have access to additional functions -->
+        <script src="/js/chat.js"></script>
     </body>
 </html>
