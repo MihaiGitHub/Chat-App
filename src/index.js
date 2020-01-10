@@ -13,9 +13,13 @@ const publicDirectoryPath = path.join(__dirname, '../public')
 
 app.use(express.static(publicDirectoryPath))
 
-// List for client connection event to occur
-io.on('connection', () => {
+// Listen for client connection event to occur
+io.on('connection', (socket) => {
     console.log('New WebSocket connection')
+
+    const message = 'Welcome!'
+
+    socket.emit('message', message)
 })
 
 server.listen(port, () => {
