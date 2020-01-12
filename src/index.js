@@ -25,9 +25,12 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('message', 'A new user has joined!')
 
     // Listen for sendMessage event coming from client
-    socket.on('sendMessage', (message) => {
+    socket.on('sendMessage', (message, callback) => {
         // Send event to all connections
         io.emit('message', message)
+
+        // Callback function that runs after event has been acknowledged by client
+        callback('Delivered!')
     })
 
     // Listen for sendLocation event coming from client
