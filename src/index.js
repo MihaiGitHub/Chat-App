@@ -41,9 +41,12 @@ io.on('connection', (socket) => {
     })
 
     // Listen for sendLocation event coming from client
-    socket.on('sendLocation', (coords) => {
+    socket.on('sendLocation', (coords, callback) => {
         // Send event to all connections with lat and long
         io.emit('message', `https://google.com/maps?q=${coords.latitude},${coords.longitude}`)
+
+        // Let client know the event has been acknowledged
+        callback()
     })
     
     // Built in event for client disconnect
