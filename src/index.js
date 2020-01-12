@@ -29,6 +29,11 @@ io.on('connection', (socket) => {
         // Send event to all connections
         io.emit('message', message)
     })
+
+    // Built in event for client disconnect
+    socket.on('disconnect', () => {
+        io.emit('message', 'A user has left!')
+    })
 })
 
 server.listen(port, () => {
