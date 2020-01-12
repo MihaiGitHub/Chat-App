@@ -20,6 +20,11 @@ io.on('connection', (socket) => {
     const message = 'Welcome!'
 
     socket.emit('message', message)
+
+    // Listen for sendMessage event coming from client
+    socket.on('sendMessage', (message) => {
+        io.emit('message', message)
+    })
 })
 
 server.listen(port, () => {
