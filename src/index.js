@@ -21,8 +21,12 @@ io.on('connection', (socket) => {
 
     socket.emit('message', message)
 
+    // Will send this event to everyone except this particular socket
+    socket.broadcast.emit('message', 'A new user has joined!')
+
     // Listen for sendMessage event coming from client
     socket.on('sendMessage', (message) => {
+        // Send event to all connections
         io.emit('message', message)
     })
 })
