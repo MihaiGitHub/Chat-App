@@ -1,20 +1,33 @@
 // Call io() function to connect from client and send events from client
 const socket = io()
 
+// Elements
+const $messageForm = document.querySelector('#message-form')
+const $messageFormInput = $messageForm.querySelector('input')
+const $messageFormButton = $messageForm.querySelector('button')
+
 // Listen for event emitted from server
 socket.on('message', (message) => {
     console.log(message)
 })
 
 // When listening to form submit event we get access to e event argument
-document.querySelector('#message-form').addEventListener('submit', (e) => {
+$messageForm.addEventListener('submit', (e) => {
     // Prevent full page refresh
     e.preventDefault()
+
+    // Disable form button once the form is submitted
+    $messageFormButton.setAttribute('disabled', 'disabled')
 
     const message = e.target.elements.message.value
 
     socket.emit('sendMessage', message, (error) => {
         // Runs when event is acknowledged by client
+
+        // Enable form button once message has been sent
+        $messageFormButton.removeAttribute('disabled')
+        $messageFormInput.value = ''
+        $messageFormInput.focus()
 
         if(error){
             return console.log(error)
