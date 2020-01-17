@@ -6,10 +6,19 @@ const $messageForm = document.querySelector('#message-form')
 const $messageFormInput = $messageForm.querySelector('input')
 const $messageFormButton = $messageForm.querySelector('button')
 const $sendLocationButton = document.querySelector('#send-location')
+const $messages = document.querySelector('#messages')
+
+// Templates
+const messageTemplate = document.querySelector('#message-template').innerHTML
 
 // Listen for event emitted from server
 socket.on('message', (message) => {
     console.log(message)
+
+    const html = Mustache.render(messageTemplate, {
+        message // message: message
+    })
+    $messages.insertAdjacentHTML('beforeend', html)
 })
 
 // When listening to form submit event we get access to e event argument
