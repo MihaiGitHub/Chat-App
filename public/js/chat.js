@@ -10,15 +10,26 @@ const $messages = document.querySelector('#messages')
 
 // Templates
 const messageTemplate = document.querySelector('#message-template').innerHTML
+const locationMessageTemplate = document.querySelector('#location-message-template').innerHTML
 
 // Listen for event emitted from server
 socket.on('message', (message) => {
     console.log(message)
 
+    // Render message on UI
     const html = Mustache.render(messageTemplate, {
         message // message: message
     })
     $messages.insertAdjacentHTML('beforeend', html)
+})
+
+// Listen for locationMessage event from server
+socket.on('locationMessage', (url) => {
+        // Render message on UI
+        const html = Mustache.render(locationMessageTemplate, {
+            url // url: url
+        })
+        $messages.insertAdjacentHTML('beforeend', html)
 })
 
 // When listening to form submit event we get access to e event argument
