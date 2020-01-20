@@ -21,16 +21,19 @@ socket.on('message', (message) => {
         message: message.text,
         createdAt: moment(message.createdAt).format('h:mm a')
     })
+
     $messages.insertAdjacentHTML('beforeend', html)
 })
 
 // Listen for locationMessage event from server
-socket.on('locationMessage', (url) => {
-        // Render message on UI
-        const html = Mustache.render(locationMessageTemplate, {
-            url // url: url
-        })
-        $messages.insertAdjacentHTML('beforeend', html)
+socket.on('locationMessage', (message) => {
+    // Render message on UI
+    const html = Mustache.render(locationMessageTemplate, {
+        url: message.url,
+        createdAt: moment(message.createdAt).format('h:mm a')
+    })
+
+    $messages.insertAdjacentHTML('beforeend', html)
 })
 
 // When listening to form submit event we get access to e event argument
