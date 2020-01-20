@@ -4,6 +4,8 @@ const http = require('http')
 const express = require('express')
 const socketio = require('socket.io')
 const Filter = require('bad-words')
+const { generateMessage } = require('./utils/messages')
+
 const app = express()
 const server = http.createServer(app)
 
@@ -18,12 +20,11 @@ app.use(express.static(publicDirectoryPath))
 io.on('connection', (socket) => {
     console.log('New WebSocket connection')
 
-    const message = 'Welcome!'
-
-    socket.emit('message', message)
+    // Send an object from server to client
+    socket.emit('message', generateMessage('Welcome!'))
 
     // Will send this event to everyone except this particular socket
-    socket.broadcast.emit('message', 'A new user has joined!')
+    socket.broadcast.emit('message', generateMessage('A new user has joined!'))
 
     // Listen for sendMessage event coming from client
     socket.on('sendMessage', (message, callback) => {
@@ -34,7 +35,7 @@ io.on('connection', (socket) => {
         }
 
         // Send event to all connections
-        io.emit('message', message)
+        io.emit('message', generateMessage(message))
 
         // Callback function that runs after event has been acknowledged by client
         callback('Delivered!')
@@ -51,7 +52,7 @@ io.on('connection', (socket) => {
     
     // Built in event for client disconnect
     socket.on('disconnect', () => {
-        io.emit('message', 'A user has left!')
+        io.emit('message', generateMessage('A user has left!'))
     })
 })
 
