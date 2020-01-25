@@ -37,7 +37,7 @@ const removeUser = (id) => {
     // index = -1 for no match
     const index = users.findIndex((user) => {
         // return true if user.id = user we are looking for
-        return user.id = id
+        return user.id === id
     })
 
     // Remove user from users array and return the user removed
@@ -46,4 +46,17 @@ const removeUser = (id) => {
     }
 }
 
+const getUser = (id) => {
+   return users.find((user) => user.id === id )
+}
 
+const getUsersInRoom = (room) => {
+    return users.filter((user) => user.room === room)
+}
+
+module.exports = {
+    addUser,
+    removeUser,
+    getUser,
+    getUsersInRoom
+}
