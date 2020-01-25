@@ -33,3 +33,17 @@ const addUser = ({ id, username, room }) => {
     return { user }
 }
 
+const removeUser = (id) => {
+    // index = -1 for no match
+    const index = users.findIndex((user) => {
+        // return true if user.id = user we are looking for
+        return user.id = id
+    })
+
+    // Remove user from users array and return the user removed
+    if(index !== -1){
+        return users.splice(index, 1)[0]
+    }
+}
+
+
