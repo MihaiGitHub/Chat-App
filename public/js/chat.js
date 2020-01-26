@@ -88,5 +88,11 @@ $sendLocationButton.addEventListener('click', () => {
 
 // Send username and room to server and have an acknowledgement function
 socket.emit('join', { username, room }, (error) => {
-    
+    // Acknowledgement function
+
+    // Handle error
+    if(error){
+        alert(error)
+        location.href = '/'
+    }
 })

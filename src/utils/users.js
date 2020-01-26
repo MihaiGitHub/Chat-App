@@ -14,15 +14,17 @@ const addUser = ({ id, username, room }) => {
     }
 
     // Check for existing user
-    const existingUser = users.find(() => {
+    const existingUser = users.find((user) => {
         // both username and room are true then user already exists in chatroom
-        return username.room === room && username.username === username
+        return room === user.room && user.username === username
     })
+
+    console.log('existing user ', existingUser)
 
     // Validate username
     if(existingUser){
         return {
-            error: 'Username is in user!'
+            error: 'Username is in room!'
         }
     }
 
