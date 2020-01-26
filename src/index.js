@@ -35,10 +35,10 @@ io.on('connection', (socket) => {
         socket.join(user.room)
 
         // Send an object from server to client
-        socket.emit('message', generateMessage('Welcome!'))
+        socket.emit('message', generateMessage('Admin', 'Welcome!'))
 
         // Will send this event to everyone except this particular socket
-        socket.broadcast.to(user.room).emit('message', generateMessage(`${user.username} has joined!`))
+        socket.broadcast.to(user.room).emit('message', generateMessage('Admin', `${user.username} has joined!`))
 
         // Let the client know the user was able to join without an error
         callback()
@@ -55,7 +55,7 @@ io.on('connection', (socket) => {
         }
 
         // Send event to all connections
-        io.to(user.room).emit('message', generateMessage(message))
+        io.to(user.room).emit('message', generateMessage(user.username, message))
 
         // Callback function that runs after event has been acknowledged by client
         callback('Delivered!')
@@ -66,7 +66,7 @@ io.on('connection', (socket) => {
         const user = getUser(socket.id)
 
         // Send event to all connections with lat and long
-        io.to(user.room).emit('locationMessage', generateLocationMessage(`https://google.com/maps?q=${coords.latitude},${coords.longitude}`))
+        io.to(user.room).emit('locationMessage', generateLocationMessage(user.username, `https://google.com/maps?q=${coords.latitude},${coords.longitude}`))
 
         // Let client know the event has been acknowledged
         callback()
@@ -77,7 +77,7 @@ io.on('connection', (socket) => {
         const user = removeUser(socket.id)
 
         if(user){
-            io.to(user.room).emit('message', generateMessage(`${user.username} has left!`))
+            io.to(user.room).emit('message', generateMessage('Admin', `${user.username} has left!`))
         }
     })
 })
