@@ -18,7 +18,7 @@ const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true }
 
 // Listen for event emitted from server
 socket.on('message', (message) => {
-    console.log(message)
+    console.log('messagessss ', message)
 
     // Render message on UI
     const html = Mustache.render(messageTemplate, {

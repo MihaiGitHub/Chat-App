@@ -19,8 +19,6 @@ const addUser = ({ id, username, room }) => {
         return room === user.room && user.username === username
     })
 
-    console.log('existing user ', existingUser)
-
     // Validate username
     if(existingUser){
         return {
@@ -49,6 +47,8 @@ const removeUser = (id) => {
 }
 
 const getUser = (id) => {
+    console.log('id ', id)
+    console.log('users ', users)
    return users.find((user) => user.id === id )
 }
 

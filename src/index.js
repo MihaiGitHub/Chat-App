@@ -5,7 +5,7 @@ const express = require('express')
 const socketio = require('socket.io')
 const Filter = require('bad-words')
 const { generateMessage, generateLocationMessage } = require('./utils/messages')
-const { addUser, removeUser, getUser,  } = require('./utils/users')
+const { addUser, removeUser, getUser, getUsersInRoom } = require('./utils/users')
 
 const app = express()
 const server = http.createServer(app)
@@ -46,6 +46,8 @@ io.on('connection', (socket) => {
 
     // Listen for sendMessage event coming from client
     socket.on('sendMessage', (message, callback) => {
+
+        const user = getUser(socket.id)       
         const filter = new Filter()
 
         if(filter.isProfane(message)){
@@ -53,7 +55,7 @@ io.on('connection', (socket) => {
         }
 
         // Send event to all connections
-        io.emit('message', generateMessage(message))
+        io.to(user.room).emit('message', generateMessage(message))
 
         // Callback function that runs after event has been acknowledged by client
         callback('Delivered!')
@@ -61,8 +63,10 @@ io.on('connection', (socket) => {
 
     // Listen for sendLocation event coming from client
     socket.on('sendLocation', (coords, callback) => {
+        const user = getUser(socket.id)
+
         // Send event to all connections with lat and long
-        io.emit('locationMessage', generateLocationMessage(`https://google.com/maps?q=${coords.latitude},${coords.longitude}`))
+        io.to(user.room).emit('locationMessage', generateLocationMessage(`https://google.com/maps?q=${coords.latitude},${coords.longitude}`))
 
         // Let client know the event has been acknowledged
         callback()
