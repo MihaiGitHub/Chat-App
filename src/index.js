@@ -40,6 +40,12 @@ io.on('connection', (socket) => {
         // Will send this event to everyone except this particular socket
         socket.broadcast.to(user.room).emit('message', generateMessage('Admin', `${user.username} has joined!`))
 
+        // Send roomData event to client with all the users for that room
+        io.to(user.room).emit('roomData', {
+            room: user.room,
+            users: getUsersInRoom(user.room)
+        })
+
         // Let the client know the user was able to join without an error
         callback()
     })
@@ -78,6 +84,10 @@ io.on('connection', (socket) => {
 
         if(user){
             io.to(user.room).emit('message', generateMessage('Admin', `${user.username} has left!`))
+            io.to(user.room).emit('roomData', {
+                room: user.room,
+                users: getUsersInRoom(user.room)
+            })
         }
     })
 })
