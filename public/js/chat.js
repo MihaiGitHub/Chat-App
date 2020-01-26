@@ -17,6 +17,33 @@ const sidebarTemplate = document.querySelector('#sidebar-template').innerHTML
 // Qs - query string library loaded in chat.html
 const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true }) // ? goes away from query string
 
+// Automatic scrolling for messages
+const autoscroll = () => {
+    // Grab the new message element created
+    const $newMessage = $messages.lastElementChild
+
+    // Get the margin value auto created by the browser
+    const newMessageStyles = getComputedStyle($newMessage) // Global style computed by the browser
+    const newMessageMargin = parseInt(newMessageStyles.marginBottom)
+
+    // Take the margin and add on to the height of the message and getting its total height
+    const newMessageHeight = $newMessage.offsetHeight + newMessageMargin
+
+    // Get the visible height of the entire messages box
+    const visibleHeight = $messages.offsetHeight
+
+    // Height of messages container
+    const containerHeight = $messages.scrollHeight
+
+    // How far have I scrolled?
+    const scrollOffset = $messages.scrollTop + visibleHeight
+
+    // Find out if scrolled to the bottom before adding the new message in
+    if(containerHeight - newMessageHeight <= scrollOffset){
+        $messages.scrollTop = $messages.scrollHeight
+    }
+}
+
 // Listen for event emitted from server
 socket.on('message', (message) => {
 
@@ -28,6 +55,7 @@ socket.on('message', (message) => {
     })
 
     $messages.insertAdjacentHTML('beforeend', html)
+    autoscroll()
 })
 
 // Listen for locationMessage event from server
@@ -41,6 +69,7 @@ socket.on('locationMessage', (message) => {
     })
 
     $messages.insertAdjacentHTML('beforeend', html)
+    autoscroll()
 })
 
 socket.on('roomData', ({ room, users }) => {
